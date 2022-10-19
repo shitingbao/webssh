@@ -46,6 +46,14 @@ func WithUser(user string) Option {
 	}
 }
 
+func WithPassword(password string) Option {
+	return func(s *SSHOption) {
+		if password != "" {
+			s.Password = password
+		}
+	}
+}
+
 func WithTimeOut(t time.Duration) Option {
 	return func(s *SSHOption) {
 		s.Timeout = t

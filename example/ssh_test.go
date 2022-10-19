@@ -1,22 +1,13 @@
 package example
 
 import (
-	"net/http"
 	"testing"
+	"time"
 
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
-	"github.com/gorilla/websocket"
 	"github.com/shitingbao/webssh"
 )
-
-var upgrader = websocket.Upgrader{
-	ReadBufferSize:  1024,
-	WriteBufferSize: 1024 * 10,
-	CheckOrigin: func(r *http.Request) bool {
-		return true
-	},
-}
 
 func TestSSh(t *testing.T) {
 	r := gin.Default()
@@ -38,11 +29,10 @@ func TestSSh(t *testing.T) {
 }
 
 func ServeConn(c *gin.Context) {
-	wsConn, err := upgrader.Upgrade(c.Writer, c.Request, nil)
-	if err != nil {
-		c.AbortWithStatusJSON(200, gin.H{"ok": false, "msg": err.Error()})
-		return
-	}
-	defer wsConn.Close()
-	webssh.SSHHandle(wsConn)
+	opt := []webssh.Option{
+		webssh.WithHostAddr("hostAddress"),
+		webssh.WithUser("root"),
+		webssh.WithKeyValue("yor PrivateKey"),
+		webssh.WithTimeOut(time.Second)}
+	webssh.SSHHandle(c.Writer, c.Request, opt...)
 }

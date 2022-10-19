@@ -3,19 +3,28 @@ package webssh
 import (
 	"context"
 	"log"
+	"net/http"
 	"sync"
 	"time"
 
 	"github.com/gorilla/websocket"
 )
 
-func SSHHandle(wsConn *websocket.Conn) {
-	client, err := newSSHClient(
-		WithHostAddr("hostAddress"),
-		WithKeyValue("pubkey"),
-		WithUser("intel"),
-		WithTimeOut(time.Second),
-	)
+var upgrader = websocket.Upgrader{
+	ReadBufferSize:  1024,
+	WriteBufferSize: 1024 * 10,
+	CheckOrigin: func(r *http.Request) bool {
+		return true
+	},
+}
+
+func SSHHandle(w http.ResponseWriter, r *http.Request, opt ...Option) {
+	wsConn, err := upgrader.Upgrade(w, r, nil)
+	if err != nil {
+		return
+	}
+	defer wsConn.Close()
+	client, err := newSSHClient(opt...)
 	if err != nil {
 		wsConn.WriteControl(websocket.CloseMessage,
 			[]byte(err.Error()), time.Now().Add(time.Second))
