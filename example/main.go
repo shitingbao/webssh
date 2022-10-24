@@ -1,9 +1,9 @@
-package example
+package main
 
 import (
+	"log"
 	"os"
 	"path"
-	"testing"
 	"time"
 
 	"github.com/gin-contrib/cors"
@@ -11,7 +11,7 @@ import (
 	"github.com/shitingbao/webssh"
 )
 
-func TestSSh(t *testing.T) {
+func main() {
 	r := gin.Default()
 	pa, err := os.Getwd()
 	if err != nil {
@@ -20,7 +20,7 @@ func TestSSh(t *testing.T) {
 
 	// pathDir := path.Join(path.Dir(pa), path.Base(pa))
 	pathDir := path.Dir(pa)
-
+	log.Println("pathDir:", pathDir)
 	// 跨域设置
 	r.Use(cors.New(cors.Config{
 		AllowOrigins: []string{"*"},

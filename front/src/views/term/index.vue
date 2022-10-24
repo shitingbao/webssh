@@ -19,7 +19,7 @@ export default {
     terminal.loadAddon(fitAddon);
     fitAddon.fit();
     let terminalContainer = document.getElementById("app");
-    const webSocket = new WebSocket(`ws://192.168.31.39:8980/ws`);
+    const webSocket = new WebSocket(`ws://127.0.0.1:8900/ws`);
 
     webSocket.onmessage = (event) => {
       terminal.write(event.data.toString(Utf8));
