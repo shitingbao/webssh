@@ -74,7 +74,7 @@ export default {
       console.log("here:", this.$route.query.sn);
     },
     clickSSH() {
-      console.log("here:", this.$route.params.sn);
+      console.log("here:", this.$route.query.sn);
       if (!this.$route.query.sn) {
         alert("no sn");
         return;
@@ -84,7 +84,7 @@ export default {
       terminal.loadAddon(fitAddon);
       fitAddon.fit();
       let terminalContainer = document.getElementById("app");
-      const webSocket = new WebSocket(`ws://192.168.31.49:8990/ws`, [
+      const webSocket = new WebSocket(`ws://192.168.31.49:8910/ws`, [
         this.$route.query.sn,
       ]);
 

@@ -1,9 +1,6 @@
 package main
 
 import (
-	"log"
-	"os"
-	"path"
 	"time"
 
 	"github.com/gin-contrib/cors"
@@ -13,14 +10,6 @@ import (
 
 func main() {
 	r := gin.Default()
-	pa, err := os.Getwd()
-	if err != nil {
-		return
-	}
-
-	// pathDir := path.Join(path.Dir(pa), path.Base(pa))
-	pathDir := path.Dir(pa)
-	log.Println("pathDir:", pathDir)
 	// 跨域设置
 	r.Use(cors.New(cors.Config{
 		AllowOrigins: []string{"*"},
@@ -29,10 +18,13 @@ func main() {
 		ExposeHeaders:    []string{"Content-Length"},
 		AllowCredentials: true,
 	}))
-
+	// 将编译好的 dist 文件放在同级目录
 	r.GET("/ws", ServeConn)
-	r.Static("/static", path.Join(pathDir, "front/dist/"))       // "/Users/guyu/mygo/src/xboost-ssh/front/dist/"
-	r.LoadHTMLFiles(path.Join(pathDir, "front/dist/index.html")) // "/Users/guyu/mygo/src/xboost-ssh/front/dist/index.html"
+	r.Static("/static", "./dist/")                 // "/Users/guyu/mygo/src/xboost-ssh/front/dist/"
+	r.Static("/js", "./dist/js")                   // "/Users/guyu/mygo/src/xboost-ssh/front/dist/"
+	r.Static("/css", "./dist/css")                 // "/Users/guyu/mygo/src/xboost-ssh/front/dist/"
+	r.Static("/favicon.ico", "./dist/favicon.ico") // "/Users/guyu/mygo/src/xboost-ssh/front/dist/"
+	r.LoadHTMLFiles("./dist/index.html")           // "/Users/guyu/mygo/src/xboost-ssh/front/dist/index.html"
 	r.GET("/", func(c *gin.Context) {
 		c.HTML(200, "index.html", nil)
 	})
