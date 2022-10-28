@@ -16,7 +16,7 @@ export default {
   },
   data() {
     return {
-      sn: "input your sn",
+      sn: "XB01-X001-B003-C888",
     };
   },
 };
