@@ -1,6 +1,9 @@
 package main
 
 import (
+	"log"
+	"os"
+	"path"
 	"time"
 
 	"github.com/gin-contrib/cors"
@@ -9,6 +12,11 @@ import (
 )
 
 func main() {
+	rootPath, err := os.Getwd()
+	if err != nil {
+		log.Println("Getwd err:", err)
+		return
+	}
 	r := gin.Default()
 	// 跨域设置
 	r.Use(cors.New(cors.Config{
@@ -20,11 +28,8 @@ func main() {
 	}))
 	// 将编译好的 dist 文件放在同级目录
 	r.GET("/ws", ServeConn)
-	r.Static("/static", "./dist/")                 // "/Users/guyu/mygo/src/xboost-ssh/front/dist/"
-	r.Static("/js", "./dist/js")                   // "/Users/guyu/mygo/src/xboost-ssh/front/dist/"
-	r.Static("/css", "./dist/css")                 // "/Users/guyu/mygo/src/xboost-ssh/front/dist/"
-	r.Static("/favicon.ico", "./dist/favicon.ico") // "/Users/guyu/mygo/src/xboost-ssh/front/dist/"
-	r.LoadHTMLFiles("./dist/index.html")           // "/Users/guyu/mygo/src/xboost-ssh/front/dist/index.html"
+	r.Static("/static", path.Join(rootPath, "dist"))
+	r.LoadHTMLFiles(path.Join(rootPath, "dist/index.html"))
 	r.GET("/", func(c *gin.Context) {
 		c.HTML(200, "index.html", nil)
 	})

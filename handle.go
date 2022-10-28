@@ -19,7 +19,15 @@ var upgrader = websocket.Upgrader{
 }
 
 func SSHHandle(w http.ResponseWriter, r *http.Request, opt ...Option) {
-	wsConn, err := upgrader.Upgrade(w, r, nil)
+	sec := r.Header.Get("Sec-WebSocket-Protocol") // get sn
+	log.Println("sec:", sec)
+	h := http.Header{}
+	if sec != "" {
+		h.Add("Sec-WebSocket-Protocol", sec)
+	} else {
+		h = nil
+	}
+	wsConn, err := upgrader.Upgrade(w, r, h)
 	if err != nil {
 		return
 	}
