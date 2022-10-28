@@ -38,7 +38,7 @@ func main() {
 
 func ServeConn(c *gin.Context) {
 	opt := []webssh.Option{
-		webssh.WithHostAddr("hostAddress"),
+		webssh.WithHostAddr("hostAddress" + ":port"),
 		webssh.WithUser("root"),
 		webssh.WithKeyValue("yor PrivateKey"),
 		webssh.WithTimeOut(time.Second)}
