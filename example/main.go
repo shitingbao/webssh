@@ -41,6 +41,7 @@ func ServeConn(c *gin.Context) {
 		webssh.WithHostAddr("hostAddress" + ":port"),
 		webssh.WithUser("root"),
 		webssh.WithKeyValue("yor PrivateKey"),
+		// or webssh.WithPassword("your password")
 		webssh.WithTimeOut(time.Second)}
 	webssh.SSHHandle(c.Writer, c.Request, opt...)
 }

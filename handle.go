@@ -18,6 +18,9 @@ var upgrader = websocket.Upgrader{
 	},
 }
 
+// SSHHandle
+// you can add args in Sec-WebSocket-Protocol
+// your can fork this project and change these code by your think
 func SSHHandle(w http.ResponseWriter, r *http.Request, opt ...Option) {
 	sec := r.Header.Get("Sec-WebSocket-Protocol") // get sn
 	log.Println("sec:", sec)
